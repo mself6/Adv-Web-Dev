@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title> Content 1 </title>
+  <title> Content 2</title>
   <style>
   div.container{
     border-style: solid;
@@ -23,7 +23,7 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script>
-    $.getJSON('it-ebooks2.json', function(data){
+    $.getJSON('it-ebooks.json', function(data){
       var books = '';
       $(data.volumeInfo).each(function(index, value){
         var bookDisplay = "<div class='image'><img src = '" + value.imageLinks.small + "' alt=" + value.title + "></div>" +
@@ -34,6 +34,7 @@
                           "<h5>Publish Date: " + value.publishedDate + "</h5>" +
                           "<h5>ISBN_10: <i>" + value.industryIdentifiers[0].identifier + "</i></h5>" +
                           "<h5>ISBN_13: <i>" + value.industryIdentifiers[1].identifier + "</i></h5><br><br><br><br><br>" +
+                          "<h2><u>Description: </u></h2>" +
                           "<p>" + value.description + "</p>"
         $(bookDisplay).appendTo(".container");
       });
