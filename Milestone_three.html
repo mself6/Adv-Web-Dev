@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title> Milestone 1 </title>
+  <style>
+  div.container{
+    border-style: solid;
+    border-color: black;
+    border-width: 5px;
+  }
+
+
+  .wrapper.h1, h2, h3, h5, h6{
+
+
+  }
+
+  </style>
+
+</head>
+<body>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script>
+    $.getJSON('https://www.googleapis.com/books/v1/volumes/Wfan6L9RGgYC', function(data){
+      var books = '';
+      $(data.volumeInfo).each(function(index, value){
+        var bookDisplay = "<h1>" + value.title + "<h1>" + "<h2>" + value.subtitle +  "</h2>" + "<h3><i>" +
+          value.authors + "</i></h3>" + "<h3>" + value.publisher + "</h3>" + "<h5>" + value.publishedDate +
+          "</h5>" + "<h5><i>" + value.industryIdentifiers.identifier + "</i></h5>"
+        $(bookDisplay).appendTo("#wrapper");
+        console.log(value);
+      });
+
+      //console.log(data);
+    });
+  </script>
+  <div class="container">
+  <div id ="wrapper">
+    <!--<h1>Book Title</h1>
+    <h2>Subtitle</h2>
+    <h3>Author</h3>-->
+  </div>
+  </div>
+
+</body>
+</html>

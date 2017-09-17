@@ -12,21 +12,16 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script>
-    $.ajax({
-      url: 'https://www.googleapis.com/books/v1/volumes?q=modern%20web',
-      dataType: 'json',
-      type: 'get',
-      success: function(data){
-        cosole.log(data);
-      }
+    $.getJSON('http://it-ebooksapi.info/v1/search/modern%20web', function(data){
+      console.log(data);
     });
   </script>
 
   <h1>This is Milestone one</h1>
   <ul>
-    <li>Content 1</li>
+    <li><a href="content_1.html">Content 1</a></li>
     <li>Content 2</li>
-    <li>Content 3</li>
+    <li><a href="content_3.html">Content 3</a></li>
     <li>Content 4</li>
   </ul>
 </body>
