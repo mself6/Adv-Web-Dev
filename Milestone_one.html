@@ -6,20 +6,21 @@
   <style>
 
   </style>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script type="jquery">
-  $(document).ready(function() {
-    var myItems;
 
-    $.getJSON('https://www.googleapis.com/books/v1/volumes?q=modern%20web', function(data){
-      myItems = data.items;
-      cosole.log(myItems);
-    });
-  });
-
-  </script>
 </head>
 <body>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script>
+    $.ajax({
+      url: 'http://it-ebooksapi.info/v1/search/modern%20web',
+      dataType: 'json',
+      type: 'get',
+      success: function(data){
+        cosole.log(data);
+      }
+    });
+  </script>
 
   <h1>This is Milestone one</h1>
   <ul>
