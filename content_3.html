@@ -10,8 +10,10 @@
     border-width: 5px;
   }
 
-  div.title{
-    color: blue;
+  div.image{
+    float: left;
+    display: block;
+    margin-right: 20px;
   }
 
   </style>
@@ -24,19 +26,19 @@
     $.getJSON('https://www.googleapis.com/books/v1/volumes/Wfan6L9RGgYC', function(data){
       var books = '';
       $(data.volumeInfo).each(function(index, value){
-        var bookDisplay = "<img src = '" + value.imageLinks.small + "' alt=" + value.title + ">" +
+        var bookDisplay = "<div class='image'><img src = '" + value.imageLinks.small + "' alt=" + value.title + "></div>" +
                           "<h1 class='title'>" + value.title + "</h1>" +
-                          "<h2 class='subtitle'>" + value.subtitle +  "</h2>" +
-                          "<h3><i>" + value.authors + "</i></h3>" +
-                          "<h3>" + value.publisher + "</h3>" +
-                          "<h5>" + value.publishedDate + "</h5>" +
-                          "<h5><i>" + value.industryIdentifiers + "</i></h5>" +
+                          "<h3 class='subtitle'>" + value.subtitle +  "</h3>" +
+                          "<h5>Authors: <i>" + value.authors + "</i></h5>" +
+                          "<h5>Publisher: " + value.publisher + "</h5>" +
+                          "<h5>Publish Date: " + value.publishedDate + "</h5>" +
+                          "<h5>ISBN_10: <i>" + value.industryIdentifiers[0].identifier + "</i></h5>" +
+                          "<h5>ISBN_13: <i>" + value.industryIdentifiers[1].identifier + "</i></h5><br><br><br><br><br>" +
+                          "<h2><u>Description: </u></h2>" +
                           "<p>" + value.description + "</p>"
         $(bookDisplay).appendTo(".container");
-        console.log(value);
       });
-
-      //console.log(data);
+      console.log(data);
     });
   </script>
   <div class="container">
