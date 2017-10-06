@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Google Book Search</title>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <style>
+    .bookdiv{
+      border-style: solid;
+      border-width: 3px;
+      margin: auto;
+      padding: 20px, 20px, 20px, 20px;
+    }
+    </style>
+</head>
+<body>
+
+  <h1>Google Book Search</h1>
+  <a href="Milestone_two.html" style="text-align: left;">Back</a><br>
+  <form>
+  <input type="text" name="search" id='usr_input'>
+  <input type="submit" value="Submit" id='search'>
+  </form>
+
+
+    <div id="results" style="display: flex; flex-wrap: wrap;"><div>
+
+
+
+  <script>
+    $(function(){
+    $("#search").click(function(event) {
+      event.preventDefault();
+      var term = $("#usr_input").val(); //or get the value from a textbox user input; you can Google how to do it.
+		  var parameter="?q=" + term + "&maxResults=30&startIndex=0";
+		  var search_parameter="https://www.googleapis.com/books/v1/volumes/"+parameter;
+      $.getJSON(search_parameter, function (json){
+        console.log(json);
+        var total=json.totalItems;
+
+        var resultHTML="";
+  			for (i in json.items)
+  			{
+  				var booktitle=json.items[i].volumeInfo.title;
+  				var bookid=json.items[i].id;
+  				var cover="";
+  				if (json.items[i].volumeInfo.imageLinks != null)
+  					cover=json.items[i].volumeInfo.imageLinks.smallThumbnail;
+
+  				resultHTML+="<div class='bookdiv'>";
+  				resultHTML+="<img src='"+cover+"' style='float: left' />";
+  				resultHTML+="<a href='bookinfo.html?id="+bookid+"'>"+booktitle+"</a>";
+  				resultHTML+="</div>";;
+  			}
+  			$("#results").html(resultHTML);
+  			$(".bookdiv").css("width", "300px");
+      })
+    });
+    });
+  </script>
+</body>
+</html>
