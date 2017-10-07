@@ -17,26 +17,49 @@
 <body>
 
   <h1>Google Book Search</h1>
-  <a href="Milestone_two.html" style="text-align: left;">Back</a><br>
+  <a href="Bookshelf.html">Michael's Bookshelf</a><br>
+  <a href="Book_search.html" style="text-align: left;">Home</a><br>
+  <a href="index.html" style="text-align: left;">Back</a><br>
   <form>
   <input type="text" name="search" id='usr_input'>
   <input type="submit" value="Submit" id='search'>
+  <br>
+  <br>
+  <h3>Pages: </h3>
+  <input type="button" id="page_1" value="1">
+  <input type="button" id="page_2" value="2">
+  <input type="button" id="page_3" value="3">
   </form>
-
-
+  <br>
+  <br>
     <div id="results" style="display: flex; flex-wrap: wrap;"><div>
-
-
 
   <script>
     $(function(){
-    $("#search").click(function(event) {
+    $("#search, #page_1, #page_2, #page_3").click(function(event) {
       event.preventDefault();
-      var term = $("#usr_input").val(); //or get the value from a textbox user input; you can Google how to do it.
+      var term = $("#usr_input").val();
 		  var parameter="?q=" + term + "&maxResults=30&startIndex=0";
-		  var search_parameter="https://www.googleapis.com/books/v1/volumes/"+parameter;
+
+      var page_1 = "?q=" + term + "&maxResults=30&startIndex=0";
+      var page_2 = "?q=" + term + "&maxResults=30&startIndex=31";
+      var page_3 = "?q=" + term + "&maxResults=30&startIndex=62";
+
+      if (this.id == 'page_1'){
+        var search_parameter = "https://www.googleapis.com/books/v1/volumes/"+ page_1;
+      }
+      else if (this.id == 'page_2') {
+        var search_parameter = "https://www.googleapis.com/books/v1/volumes/"+ page_2;
+      }
+      else if (this.id == 'page_3'){
+        var search_parameter = "https://www.googleapis.com/books/v1/volumes/"+ page_3;
+      }
+      else {
+        var search_parameter = "https://www.googleapis.com/books/v1/volumes/"+ parameter;
+      }
+
       $.getJSON(search_parameter, function (json){
-        console.log(json);
+        //console.log(json);
         var total=json.totalItems;
 
         var resultHTML="";
@@ -51,12 +74,13 @@
   				resultHTML+="<div class='bookdiv'>";
   				resultHTML+="<img src='"+cover+"' style='float: left' />";
   				resultHTML+="<a href='bookinfo.html?id="+bookid+"'>"+booktitle+"</a>";
-  				resultHTML+="</div>";;
+  				resultHTML+="</div>";
   			}
   			$("#results").html(resultHTML);
   			$(".bookdiv").css("width", "300px");
       })
     });
+
     });
   </script>
 </body>
