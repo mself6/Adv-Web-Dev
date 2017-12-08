@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Ajax Search</title>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <style>
+    .booklistitem{
+      cursor: pointer;
+      margin: 1px;
+    }
+    </style>
+</head>
+<body>
+
+  <h1>Google Book Search</h1>
+  <a href="Book_search.html" style="text-align: left;">Home</a><br>
+  <a href="index.html" style="text-align: left;">Back</a><br>
+  <form>
+  <input type="text" name="search" id='usr_input'>
+  <input type="submit" value="Submit" id='search'>
+  <br>
+  <br>
+  <h3>Pages: </h3>
+  <input type="button" id="page_1" value="1">
+  <input type="button" id="page_2" value="2">
+  <input type="button" id="page_3" value="3">
+  <input type="button" id="page_4" value="4">
+  <input type="button" id="page_5" value="5">
+  </form>
+  <br>
+  <br>
+    <div id="booklist"></div>
+      <div id="bookdetails"></div>
+
+  <script>
+    $(function(){
+    $("#search, #page_1, #page_2, #page_3, #page_4, #page_5").click(function(event) {
+      event.preventDefault();
+      var term = $("#usr_input").val();
+		  var parameter="?q=" + term + "&maxResults=10&startIndex=0";
+
+      var page_1 = "?q=" + term + "&maxResults=10&startIndex=0";
+      var page_2 = "?q=" + term + "&maxResults=10&startIndex=11";
+      var page_3 = "?q=" + term + "&maxResults=10&startIndex=21";
+      var page_4 = "?q=" + term + "&maxResults=10&startIndex=31";
+      var page_5 = "?q=" + term + "&maxResults=10&startIndex=41";
+
+      if (this.id == 'page_1'){
+        var search_parameter = "https://www.googleapis.com/books/v1/volumes/"+ page_1;
+      }
+      else if (this.id == 'page_2') {
+        var search_parameter = "https://www.googleapis.com/books/v1/volumes/"+ page_2;
+      }
+      else if (this.id == 'page_3'){
+        var search_parameter = "https://www.googleapis.com/books/v1/volumes/"+ page_3;
+      }
+      else if (this.id == 'page_4'){
+        var search_parameter = "https://www.googleapis.com/books/v1/volumes/"+ page_4;
+      }
+      else if (this.id == 'page_5'){
+        var search_parameter = "https://www.googleapis.com/books/v1/volumes/"+ page_5;
+      }
+      else {
+        var search_parameter = "https://www.googleapis.com/books/v1/volumes/"+ parameter;
+      }
+
+      $.getJSON(search_parameter, function (json){
+
+        var booksHTML="";
+
+          for (i in json.items)
+          {
+            booksHTML+="<img class='booklistitem' data-bookid='"+json.items[i].id+ "'";
+            booksHTML+="src='"+json.items[i].volumeInfo.imageLinks.smallThumbnail + "' height='100'>";
+          }
+          $("#booklist").html(booksHTML);
+          $(".booklistitem").on('click', function ()
+          {
+            getBookDetails( $(this).attr("data-bookid") );
+          });
+
+          function getBookDetails(bookid)
+          {
+            $("#bookdetails").html("Working ...");
+            $.getJSON("https://www.googleapis.com/books/v1/volumes/" + bookid, function (json)
+            {
+              console.log(json);
+              $("#bookdetails").html("");
+     			    var bookHTML = "<h3>"+ json.volumeInfo.title+ "</h3>";
+     			    bookHTML+="<img src='"+ json.volumeInfo.imageLinks.smallThumbnail + "'>";
+     			    bookHTML+="<p>"+ json.volumeInfo.description+ "</p>";
+     			    bookHTML+="<a href='https://www.googleapis.com/books/v1/volumes/"+ bookid +"' target='_blank'>See this book's JSON</a>";
+              $("#bookdetails").html(bookHTML);
+            });
+          }
+        })
+    });
+
+   });
+  </script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Term Project</title>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.2.0/mustache.min.js"></script>
+	<script id="contentlisttemplate" type="text/template">
+		{{#results}}
+		<div class='contentlist' id="{{id}}">
+			<div class="contentlistheader" data-contentid="{{id}}"><img class="contentlistimage" src='https://image.tmdb.org/t/p/w500{{poster_path}}' width=50> {{title}} {{name}}</div>
+		</div>
+		{{/results}}
+	</script>
+	<script id="contentdetailstemplate" type="text/template">
+		<div><input type="button" id="close" value="Close"></div>
+		<div class='content'>
+			<h2>{{title}} {{name}}</h2>
+			<h3>{{subtitle}}</h3>
+			<img src='https://image.tmdb.org/t/p/w500{{poster_path}}' style="float: left" width=150/>
+			<div style="margin-left: 220px"><strong>Average Vote:</strong> {{vote_average}} <br> <strong>Release Date:</strong> {{release_date}} {{first_air_date}}
+			<h4>Description</h4>
+				<div>{{overview}}</div>
+			</div>
+		</div>
+	</script>
+
+	<script>
+		 //Movie Search
+     $(function ()
+     {
+         $("#movieSearch, #page_1, #page_2, #page_3, #page_4, #page_5, #topMovies").click(function(event)
+         {
+					 event.preventDefault();
+           var url= "&language=en-US&query=" + $("#searchTerm").val() + "&page=";
+           var search = "/search/movie?";
+
+					 if (this.id == 'page_1'){
+						 var servicePoint = "https://api.themoviedb.org/3" + search + "api_key=50f82d676a2bb8f8bb87130795f64f86" + url + "1";
+					 }
+				   else if (this.id == 'page_2') {
+					   var servicePoint = "https://api.themoviedb.org/3" + search + "api_key=50f82d676a2bb8f8bb87130795f64f86" + url + "2";
+					 }
+					 else if (this.id == 'page_3'){
+					   var servicePoint = "https://api.themoviedb.org/3" + search + "api_key=50f82d676a2bb8f8bb87130795f64f86" + url + "3";
+					 }
+					 else if (this.id == 'page_4'){
+					 	 var servicePoint = "https://api.themoviedb.org/3" + search + "api_key=50f82d676a2bb8f8bb87130795f64f86" + url + "4";
+					 }
+					 else if (this.id == 'page_5'){
+					 	 var servicePoint = "https://api.themoviedb.org/3" + search + "api_key=50f82d676a2bb8f8bb87130795f64f86" + url + "5";
+					 }
+					 else if (this.id == 'topMovies'){
+						 var servicePoint = "https://api.themoviedb.org/3/movie/top_rated?api_key=50f82d676a2bb8f8bb87130795f64f86&language=en-US&page=1"
+					 }
+					 else {
+					 	 var servicePoint = "https://api.themoviedb.org/3" + search + "api_key=50f82d676a2bb8f8bb87130795f64f86" + url + "1";
+					 }
+
+         $.getJSON(servicePoint, function (jsonData)
+         {
+					  $("#contentlist").html("");
+						var template = $('#contentlisttemplate').html();
+						var html = Mustache.render(template, jsonData);
+						$("#contentlist").html(html);
+
+            $(".contentlistheader").on('click', function ()
+						{
+							$(".contentlistheader").css("background-color","");
+							//div=$(this).next();
+							getContentDetails($(this).attr("data-contentid"));
+			 			});
+         });
+
+
+     function getContentDetails(contentid)
+     {
+			 $.getJSON("https://api.themoviedb.org/3/movie/" + contentid + "?api_key=50f82d676a2bb8f8bb87130795f64f86", function (jsonData)
+			 {
+				 $("#details").html("");
+				 var template = $('#contentdetailstemplate').html();
+			 	 var html = Mustache.render(template, jsonData);
+				 $("#details").html(html);
+				 $("#details").fadeIn();
+				 $("#close").click(function(){
+					 $("#details").fadeOut();
+				 });
+			 });
+     }
+
+     //For grid layout
+		 $("#grid").click(function (){
+	 		$(".contentlist").css("width", "24%").css("height","80px").css("float","left");
+	 		$("#box").attr("data-layout","Grid");
+	 	});
+		//For List layout
+	 	$("#list").click(function (){
+	 		$(".contentlist").css("width", "99%").css("height","80px");
+	 		$("#box").attr("data-layout","List");
+	 	});
+	 });
+	});
+
+
+	//TV Search
+	$(function(){
+		$("#tvSearch, #page_1, #page_2, #page_3, #page_4, #page_5, #topTV").click(function(event)
+		{
+			event.preventDefault();
+			var url= "&language=en-US&query=" + $("#searchTerm").val() + "&page=";
+			var searchtv = "/search/tv?";
+
+			if (this.id == 'page_1'){
+				var tv = "https://api.themoviedb.org/3" + searchtv + "api_key=50f82d676a2bb8f8bb87130795f64f86" + url + "1";
+			}
+			else if (this.id == 'page_2') {
+				var tv = "https://api.themoviedb.org/3" + searchtv + "api_key=50f82d676a2bb8f8bb87130795f64f86" + url + "2";
+			}
+			else if (this.id == 'page_3'){
+				var tv = "https://api.themoviedb.org/3" + searchtv + "api_key=50f82d676a2bb8f8bb87130795f64f86" + url + "3";
+			}
+			else if (this.id == 'page_4'){
+				var tv = "https://api.themoviedb.org/3" + searchtv + "api_key=50f82d676a2bb8f8bb87130795f64f86" + url + "4";
+			}
+			else if (this.id == 'page_5'){
+				var tv = "https://api.themoviedb.org/3" + searchtv + "api_key=50f82d676a2bb8f8bb87130795f64f86" + url + "5";
+			}
+			else if (this.id == 'topTV'){
+				var tv = "https://api.themoviedb.org/3/tv/top_rated?api_key=50f82d676a2bb8f8bb87130795f64f86&language=en-US&page=1"
+			}
+			else {
+				var tv = "https://api.themoviedb.org/3" + searchtv + "api_key=50f82d676a2bb8f8bb87130795f64f86" + url + "1";
+			}
+
+				$.getJSON(tv, function (jsonData)
+				{
+					 $("#contentlist").html("");
+					 var template = $('#contentlisttemplate').html();
+					 var html = Mustache.render(template, jsonData);
+					 $("#contentlist").html(html);
+
+					 $(".contentlistheader").on('click', function ()
+					 {
+						 $(".contentlistheader").css("background-color","");
+						 getContentDetails($(this).attr("data-contentid"));
+					 });
+				});
+
+				function getContentDetails(contentid)
+				{
+					$.getJSON("https://api.themoviedb.org/3/tv/" + contentid + "?api_key=50f82d676a2bb8f8bb87130795f64f86", function (jsonData)
+					{
+						$("#details").html("");
+						var template = $('#contentdetailstemplate').html();
+						var html = Mustache.render(template, jsonData);
+						$("#details").html(html);
+						$("#details").fadeIn();
+						$("#close").click(function(){
+							$("#details").fadeOut();
+						});
+					});
+				}
+	});
+});
+
+
+</script>
+<style>
+	#header{
+		background-color: #ccffff;
+		position:fixed; top: 0; left: 0px;
+		width: 100%;
+		padding: 10px;
+	}
+
+	#maincontent{
+		margin-top:140px;
+		padding-top:100px;
+	}
+
+	#details{
+		position: fixed;
+		top: 50px;
+		left: 120px;
+		overflow: auto;
+		width: 80%;
+		height: 60%;
+		background-color: #DDEEFF;
+		padding:10px;
+		display: none;
+		box-shadow: 0px 0px 20px 20px #bbbbbb;
+		outline: 500px solid rgba(0,0,0,0.5);
+	}
+
+  .contentlist{
+		border: thin solid gray;
+		background-color: #F2FFE5;
+		margin:1px;
+		width: 99%;
+		height: 80px;
+	}
+	.contentlistheader{
+		cursor: pointer;
+	}
+	.contentlistimage{
+		width: 50px;
+	}
+	.contentlistheader:hover {
+    background-color: #8CFF1A;
+  }
+	.content {
+    border: thin solid #66ddee;
+		padding: 10px;
+		margin: 10px;
+		height: 60%;
+		background-color: white;
+	}
+
+	#box
+	{
+		display: flex;
+		flex-wrap: wrap;
+		border: 3px solid red;
+		width: 800px;
+	}
+</style>
+</head>
+
+<body>
+<div id="header">
+	<a href="index.html">Home</a>
+	<h1>Movie and TV search</h1>
+	<form>
+	<input type="text" id="searchTerm">
+	<input type="button" id="movieSearch" value="Movie Search">
+	<input type="button" id="tvSearch" value="TV Search">
+  <input type="button" class="top" id="topMovies" value="Top Movies">
+  <input type="button" class="top" id="topTV" value="Top TV Shows">
+	<p>Click to switch layout: <a href="#" id='list'>List View</a> | <a href="#" id='grid'>Grid View</a></p>
+	<h3>Pages:
+	  <input type="button" class="pages" id="page_1" value="1">
+	  <input type="button" class="pages" id="page_2" value="2">
+	  <input type="button" class="pages" id="page_3" value="3">
+	  <input type="button" class="pages" id="page_4" value="4">
+	  <input type="button" class="pages" id="page_5" value="5"></h3>
+    </form>
+  </div>
+<div id="maincontent" data-layout="List">
+	<div id="contentlist"></div>
+</div>
+<div id="details"></div>
+</body>
+</html>
